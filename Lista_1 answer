@@ -1,0 +1,135 @@
+-- Creation tables --
+
+create or replace table qualidade_rc.pais 
+(
+  nome string,
+  continente string,
+  pop float64,
+  pib float64,
+  expec_vida float64
+);
+
+create or replace table qualidade_rc.cidade
+(
+  nome string,
+  pais string,
+  pop float64,
+  capital string
+);
+
+create or replace table qualidade_rc.rio 
+(
+  nome string,
+  origem string,
+  comprimento float64
+);
+
+insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+values ('canada', 'am norte', 3.1, 658, 77.08);
+insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+values ('mexico', 'am norte', 107.5 , 694, 69.1);
+insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+values ('brasil', 'am sul', 183.3 , 10004, 65.2);
+insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+values ('usa', 'am norte', 270.0 , 8003, 75.5);
+
+insert qualidade_rc.cidade (nome, pais, pop, capital)
+values ('Washington', 'usa', 3.3 , 's');
+insert qualidade_rc.cidade (nome, pais, pop, capital)
+values ('Monterrey', 'mexico', 2.0 , 'n');
+insert qualidade_rc.cidade (nome, pais, pop, capital)
+values ('Brasilia', 'brasil', 1.5 , 's');
+insert qualidade_rc.cidade (nome, pais, pop, capital)
+values ('São Paulo', 'brasil', 15.0 , 'n');
+insert qualidade_rc.cidade (nome, pais, pop, capital)
+values ('Ottawa ', 'canada', 0.8 , 's');
+insert qualidade_rc.cidade (nome, pais, pop, capital)
+values ('Cid. Mexico ', 'mexico', 14.1 , 's');
+
+insert qualidade_rc.rio (nome, origem, comprimento)
+values ('St. Lawrence', 'usa', 3.3);
+insert qualidade_rc.rio (nome, origem, comprimento)
+values ('Grande', 'usa', 2.0 );
+insert qualidade_rc.rio (nome, origem, comprimento)
+values ('Parana', 'brasil', 1.5 );
+insert qualidade_rc.rio (nome, origem, comprimento)
+values ('Mississipi', 'usa', 15.0 );
+
+-- Liste todas as cidades e os países aos quais pertencem
+
+select 
+  nome,
+  pais
+from qualidade_rc.cidade
+
+-- Liste todas as cidades que são capitais
+
+SELECT(
+  nome
+)
+from `qualidade_rc.cidade`
+where capital = 's'
+
+-- Liste todos os atributos dos países onde a expectativa de vida é menor que 70 anos. 
+select(
+  nome,
+  continente,
+  pop,
+  pib
+)
+from `qualidade_rc.pais`
+where expec_vida < 70
+
+-- Liste todas as capitais e as populações dos países cujos PIB é maior que 1 trilhão de dólares. 
+
+select
+cidade1.nomecidade,
+pais1.pib
+
+from `qualidade_rc.pais` pais1
+left join qualidade_rc.cidade cidade1
+on(
+  pais1.nomepais =cidade1.pais
+)
+
+where cidade1.capital = 's' and pais1.pib > 1000
+
+-- Quais é o nome e a população da capital do país onde o rio St. Lawrence tem sua nascente. 
+
+select
+rio1.origem,
+cidade1.pop
+
+from qualidade_rc.cidade cidade1
+left join qualidade_rc.rio rio1
+on
+(
+  cidade1.pais = rio1.origem
+)
+
+where rio1.nomerio = 'St. Lawrence' and cidade1.capital = 's'
+
+-- Qual é a média da população das cidades que não são capitais. 
+
+select
+avg(pop) media
+
+from `qualidade_rc.cidade`
+
+where capital = 'n'
+
+-- Para cada continente retorne o PIB médio de seus países. 
+
+select
+avg(pib) 
+
+from qualidade_rc.pais
+group by continente
+
+-- Para cada país onde pelo menos 2 rios tem nascente, encontre o comprimento do menor rio
+
+select
+min(comprimento)
+
+from qualidade_rc.rio
+group by origem if 
