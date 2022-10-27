@@ -1,6 +1,6 @@
 -- Creation tables --
 
-create or replace table qualidade_rc.pais 
+create or replace table qualidade.pais 
 (
   nome string,
   continente string,
@@ -9,7 +9,7 @@ create or replace table qualidade_rc.pais
   expec_vida float64
 );
 
-create or replace table qualidade_rc.cidade
+create or replace table qualidade.cidade
 (
   nome string,
   pais string,
@@ -17,42 +17,42 @@ create or replace table qualidade_rc.cidade
   capital string
 );
 
-create or replace table qualidade_rc.rio 
+create or replace table qualidade.rio 
 (
   nome string,
   origem string,
   comprimento float64
 );
 
-insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+insert qualidade.pais (nome, continente, pop, pib, expec_vida)
 values ('canada', 'am norte', 3.1, 658, 77.08);
-insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+insert qualidade.pais (nome, continente, pop, pib, expec_vida)
 values ('mexico', 'am norte', 107.5 , 694, 69.1);
-insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+insert qualidade.pais (nome, continente, pop, pib, expec_vida)
 values ('brasil', 'am sul', 183.3 , 10004, 65.2);
-insert qualidade_rc.pais (nome, continente, pop, pib, expec_vida)
+insert qualidade.pais (nome, continente, pop, pib, expec_vida)
 values ('usa', 'am norte', 270.0 , 8003, 75.5);
 
-insert qualidade_rc.cidade (nome, pais, pop, capital)
+insert qualidade.cidade (nome, pais, pop, capital)
 values ('Washington', 'usa', 3.3 , 's');
-insert qualidade_rc.cidade (nome, pais, pop, capital)
+insert qualidade.cidade (nome, pais, pop, capital)
 values ('Monterrey', 'mexico', 2.0 , 'n');
-insert qualidade_rc.cidade (nome, pais, pop, capital)
+insert qualidade.cidade (nome, pais, pop, capital)
 values ('Brasilia', 'brasil', 1.5 , 's');
-insert qualidade_rc.cidade (nome, pais, pop, capital)
+insert qualidade.cidade (nome, pais, pop, capital)
 values ('São Paulo', 'brasil', 15.0 , 'n');
-insert qualidade_rc.cidade (nome, pais, pop, capital)
+insert qualidade.cidade (nome, pais, pop, capital)
 values ('Ottawa ', 'canada', 0.8 , 's');
-insert qualidade_rc.cidade (nome, pais, pop, capital)
+insert qualidade.cidade (nome, pais, pop, capital)
 values ('Cid. Mexico ', 'mexico', 14.1 , 's');
 
-insert qualidade_rc.rio (nome, origem, comprimento)
+insert qualidade.rio (nome, origem, comprimento)
 values ('St. Lawrence', 'usa', 3.3);
-insert qualidade_rc.rio (nome, origem, comprimento)
+insert qualidade.rio (nome, origem, comprimento)
 values ('Grande', 'usa', 2.0 );
-insert qualidade_rc.rio (nome, origem, comprimento)
+insert qualidade.rio (nome, origem, comprimento)
 values ('Parana', 'brasil', 1.5 );
-insert qualidade_rc.rio (nome, origem, comprimento)
+insert qualidade.rio (nome, origem, comprimento)
 values ('Mississipi', 'usa', 15.0 );
 
 -- Liste todas as cidades e os países aos quais pertencem
@@ -60,14 +60,14 @@ values ('Mississipi', 'usa', 15.0 );
 select 
   nome,
   pais
-from qualidade_rc.cidade
+from qualidade.cidade
 
 -- Liste todas as cidades que são capitais
 
 SELECT(
   nome
 )
-from `qualidade_rc.cidade`
+from `qualidade.cidade`
 where capital = 's'
 
 -- Liste todos os atributos dos países onde a expectativa de vida é menor que 70 anos. 
@@ -77,7 +77,7 @@ select(
   pop,
   pib
 )
-from `qualidade_rc.pais`
+from `qualidade.pais`
 where expec_vida < 70
 
 -- Liste todas as capitais e as populações dos países cujos PIB é maior que 1 trilhão de dólares. 
@@ -86,8 +86,8 @@ select
 cidade1.nomecidade,
 pais1.pib
 
-from `qualidade_rc.pais` pais1
-left join qualidade_rc.cidade cidade1
+from `qualidade.pais` pais1
+left join qualidade.cidade cidade1
 on(
   pais1.nomepais =cidade1.pais
 )
@@ -100,8 +100,8 @@ select
 rio1.origem,
 cidade1.pop
 
-from qualidade_rc.cidade cidade1
-left join qualidade_rc.rio rio1
+from qualidadec.cidade cidade1
+left join qualidade.rio rio1
 on
 (
   cidade1.pais = rio1.origem
@@ -114,7 +114,7 @@ where rio1.nomerio = 'St. Lawrence' and cidade1.capital = 's'
 select
 avg(pop) media
 
-from `qualidade_rc.cidade`
+from `qualidade.cidade`
 
 where capital = 'n'
 
@@ -123,7 +123,7 @@ where capital = 'n'
 select
 avg(pib) 
 
-from qualidade_rc.pais
+from qualidade.pais
 group by continente
 
 -- Para cada país onde pelo menos 2 rios tem nascente, encontre o comprimento do menor rio
@@ -131,5 +131,7 @@ group by continente
 select
 min(comprimento)
 
-from qualidade_rc.rio
+from qualidade.rio
 group by origem if 
+
+
